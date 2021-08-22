@@ -69,4 +69,25 @@ def debtWithUser(username):
     debt = users.find({
         "Username": username
     })[0].["Debt"]
-    return debt    
+    return debt
+
+def generateReturnDictionary(status,msg):
+    retJson = {
+        "status": status,
+        "msg": msg
+    }
+    return retJson
+
+#ErrorDictionary , True/False
+def verifyCredentials(username, password):
+    if not UserExist(username):
+        return generateReturnDictionary(301, "Invalid Username"), True
+
+    correct_pw = verifyPw(username, password)
+
+    if not correct_pw:
+        return generateReturnDictionary(302, "Incorrect Password"), True
+
+    return None , False
+
+            
