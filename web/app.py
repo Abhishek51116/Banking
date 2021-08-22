@@ -45,4 +45,15 @@ class Register(Resource):
          }
          return jsonify(retJson)
 
-                
+def verifyPw(username, password):
+    if not UserExist(username):
+        return False
+
+    hashed_pw = users.find({
+        "Username": username
+    })[0].["Password"]
+
+    if bcrypt.hashpw(password.encode('utf8'), hashed_pw)==hashed_pw:
+        return True
+    else:
+        return False
