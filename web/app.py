@@ -160,7 +160,7 @@ class Transfer(Resource):
 
         updateAccount("BANK",bank_cash+1)
         updateAccount(to,cash_to +money -1)
-        updateAccountO(username,cash_from-money)
+        updateAccount(username,cash_from-money)
 
         return jsonify(generateReturnDictionary(200, f"Amount Transfered to {to}"))
 
@@ -206,5 +206,31 @@ class TakeLoan(Resource):
         updateDebt(username,debt + money)
 
         return jsonify(generateReturnDictionary(200,f"Added loan to {username} of rupees {money}, new balance = {cash} & debt = {debt}"))
+
+class PayLoan(Resource):
+    def post(self):
+
+        postedData = request.get_json()
+
+        username = postedData["username"]
+        password = postedData["password"]
+        money = postedData["amount"]
+
+        retJson, error = verifyCredentials(username, password)
+
+        if error:
+            return jsonify(retJson)
+
+        cash = cashWithUser(username)
+
+        if cash < money:
+            return jsonify(generateReturnDictionary(303, "Not enough cash to repay the loan"))
+
+        debt = debtWithUser(username)
+
+        updateAccount(username, cash - money)
+        updateDebt(username, debt - money)
+
+        return jsonify(generateReturnDictionary(200, "You have succesfully paid the loan"))
 
         
