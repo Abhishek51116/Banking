@@ -160,7 +160,7 @@ class Transfer(Resource):
 
         updateAccount("BANK",bank_cash+1)
         updateAccount(to,cash_to +money -1)
-        updateAccount(username,cash_from-money)
+        updateAccountO(username,cash_from-money)
 
         return jsonify(generateReturnDictionary(200, f"Amount Transfered to {to}"))
 
@@ -242,5 +242,3 @@ api.add_resource(PayLoan, '/payloan')
 
 if __name__=="__main__":
     app.run(host='0.0.0.0')
-
-    
