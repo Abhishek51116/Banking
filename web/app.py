@@ -164,4 +164,26 @@ class Transfer(Resource):
 
         return jsonify(generateReturnDictionary(200, f"Amount Transfered to {to}"))
 
-                    
+class Balance(Resource):
+    def post(self):
+
+        postedData = request.get_json()
+
+        username = postedData["username"]
+        password = postedData["password"]
+
+        retJson , error = verifyCredentials(username , password)
+
+        if error:
+            return jsonify(retJson)
+
+        retJson = users.find({
+            "Username":username
+        },{
+            "Password": 0,
+            "_id": 0
+        })[0]
+
+        return jsonify(retJson)
+
+            
